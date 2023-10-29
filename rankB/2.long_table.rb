@@ -1,3 +1,5 @@
+# https://paiza.jp/works/mondai/b_rank_skillcheck_sample/long-table
+
 INPUT1 = <<~"EOS"
 6 3
 3 2
