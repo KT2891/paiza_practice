@@ -34,6 +34,8 @@ def solve(input)
   out_cars = []
   min_car_num = 1
   while cars.length > 0 do
+    # この記述は計算量が多い。今回は1から始まるため問題ないが数字が飛ぶ場合は使用できない。
+    # min_id = cars.min_by{ |car| car.id }.id
     if cars[0].id == min_car_num
       out_cars << cars.shift
       min_car_num += 1
