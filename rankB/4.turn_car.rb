@@ -46,7 +46,7 @@ def solve(input)
   end
 
   result = out_cars.max_by{ |car| car.turn_count }.turn_count
-  pp result 
+  pp result
 end
 
 solve(INPUT)
