@@ -86,7 +86,20 @@ class Map
 
   # 下の数値が0の場合数字を下に落とす
   def drop
-
+    for i in 2..@lows do
+      for j in 0..@cols - 1 do
+        target = @map_info[@lows - i][j]
+        unless target == 0
+          for k in 1..(i - 1) do
+            if @map_info[@lows - k][j] == 0
+              @map_info[@lows - k][j] = target
+              @map_info[@lows - i][j] = 0
+              break
+            end
+          end
+        end
+      end
+    end
   end
 
   # @del_checkを条件に合わせて設定
@@ -187,10 +200,21 @@ class Map
     end
   end
 
+  def check_delete_data
+    flag = false
+    flag = @del_check.any? { |row| row.any?(true) }
+  end
+
   # 提出するために数値を変更
   def conversion_data
     @map_info.each do |row|
       row.map! { |element| element == 0 ? "." : element}
+    end
+  end
+
+  def solve_map_info
+    @map_info.each do |row|
+      puts row.join
     end
   end
 end
@@ -207,13 +231,15 @@ def solve(input)
   end
   map = Map.new(map_info)
 
-  map.solve_pazzle
-  map.delete_closs
-  map.drop
-  map.reset_del_check
-
+  while true
+    map.solve_pazzle
+    break unless map.check_delete_data
+    map.delete_closs
+    map.drop
+    map.reset_del_check
+  end
   map.conversion_data
-  pp map
+  map.solve_map_info
 end
 
-solve(INPUT1)
+solve(INPUT2)
