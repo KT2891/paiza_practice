@@ -64,7 +64,7 @@ class Map
     @map_info = info
     @lows = @map_info.length
     @cols = @map_info[0].length
-    @del_check = Array.new(@lows, Array.new(@cols, false))
+    @del_check = Array.new(@lows) { Array.new(@cols,false)}
   end
 
   def reset_del_check
@@ -77,69 +77,8 @@ class Map
   def delete_closs
     for i in 0..@lows - 1 do
       for j in 0..@cols - 1 do
-        base = @map_info[i][j]
-        case i
-        # 上段
-        when 0
-          case j
-          when 0 # 左上
-            if @map_info[i][j + 1] == base &&
-              @map_info[i + 1][j] == base
-              @del_check[i][j] = true
-            end
-          when @cols - 1 #右上
-            if @map_info[i][j - 1] == base &&
-              @map_info[i + 1][j] == base
-              @del_check[i][j] = true
-            end
-          else # 上段中央
-            if @map_info[i][j - 1] == base &&
-              @map_info[i][j + 1] == base &&
-              @map_info[i + 1][j] == base
-              @del_check[i][j] = true
-            end
-          end
-        when @lows - 1
-          case j
-          when 0 # 左下
-            if @map_info[i][j + 1] == base &&
-              @map_info[i - 1][j] == base
-              @del_check[i][j] = true
-            end
-          when @cols - 1 # 右下
-            if @map_info[i][j - 1] == base &&
-              @map_info[i - 1][j] == base
-              @del_check[i][j] = true
-            end
-          else # 下段中央
-            if @map_info[i][j - 1] == base &&
-              @map_info[i][j + 1] == base &&
-              @map_info[i - 1][j] == base
-              @del_check[i][j] = true
-            end
-          end
-        else
-          case j
-          when 0 # 左列中央
-            if @map_info[i - 1][j] == base &&
-              @map_info[i + 1][j] == base &&
-              @map_info[i][j + 1] == base
-              @del_check[i][j] = true
-            end
-          when @cols - 1 # 右列中央
-            if @map_info[i - 1][j] == base &&
-              @map_info[i + 1][j] == base &&
-              @map_info[i][j - 1] == base
-              @del_check[i][j] = true
-            end
-          else # その他
-            if @map_info[i - 1][j] == base &&
-              @map_info[i + 1][j] == base &&
-              @map_info[i][j + 1] == base &&
-              @map_info[i][j - 1] == base
-              @del_check[i][j] = true
-            end
-          end
+        if @del_check[i][j] == true
+          @map_info[i][j] = 0
         end
       end
     end
@@ -152,7 +91,100 @@ class Map
 
   # @del_checkを条件に合わせて設定
   def solve_pazzle
-    
+    for i in 0..@lows - 1 do
+      for j in 0..@cols - 1 do
+        base = @map_info[i][j]
+        unless base == 0
+          case i
+          # 上段
+          when 0
+            case j
+            when 0 # 左上
+              if @map_info[i][j + 1] == base &&
+                @map_info[i + 1][j] == base
+                @del_check[i][j] = true
+                @del_check[i][j + 1] = true
+                @del_check[i + 1][j] = true
+              end
+            when @cols - 1 #右上
+              if @map_info[i][j - 1] == base &&
+                @map_info[i + 1][j] == base
+                @del_check[i][j] = true
+                @del_check[i][j - 1] = true
+                @del_check[i + 1][j] = true
+              end
+            else # 上段中央
+              if @map_info[i][j - 1] == base &&
+                @map_info[i][j + 1] == base &&
+                @map_info[i + 1][j] == base
+                @del_check[i][j - 1] = true
+                @del_check[i][j + 1] = true
+                @del_check[i + 1][j] = true
+                @del_check[i][j] = true
+              end
+            end
+          when @lows - 1
+            case j
+            when 0 # 左下
+              if @map_info[i][j + 1] == base &&
+                @map_info[i - 1][j] == base
+                @del_check[i][j] = true
+                @del_check[i][j + 1] = true
+                @del_check[i - 1][j] = true
+              end
+            when @cols - 1 # 右下
+              if @map_info[i][j - 1] == base &&
+                @map_info[i - 1][j] == base
+                @del_check[i][j] = true
+                @del_check[i][j - 1] = true
+                @del_check[i - 1][j] = true
+              end
+            else # 下段中央
+              if @map_info[i][j - 1] == base &&
+                @map_info[i][j + 1] == base &&
+                @map_info[i - 1][j] == base
+                @del_check[i][j] = true
+                @del_check[i][j - 1] = true
+                @del_check[i][j + 1] = true
+                @del_check[i - 1][j] = true
+              end
+            end
+          else
+            case j
+            when 0 # 左列中央
+              if @map_info[i - 1][j] == base &&
+                @map_info[i + 1][j] == base &&
+                @map_info[i][j + 1] == base
+                @del_check[i][j] = true
+                @del_check[i - 1][j] = true
+                @del_check[i + 1][j] = true
+                @del_check[i][j + 1] = true
+              end
+            when @cols - 1 # 右列中央
+              if @map_info[i - 1][j] == base &&
+                @map_info[i + 1][j] == base &&
+                @map_info[i][j - 1] == base
+                @del_check[i][j] = true
+                @del_check[i - 1][j] = true
+                @del_check[i + 1][j] = true
+                @del_check[i][j - 1]= true
+              end
+            else # その他
+              if @map_info[i - 1][j] == base &&
+                @map_info[i + 1][j] == base &&
+                @map_info[i][j + 1] == base &&
+                @map_info[i][j - 1] == base
+                @del_check[i][j] = true
+                @del_check[i - 1][j] = true
+                @del_check[i + 1][j] = true
+                @del_check[i][j + 1] = true
+                @del_check[i][j - 1] = true
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
   # 提出するために数値を変更
@@ -176,6 +208,10 @@ def solve(input)
   map = Map.new(map_info)
 
   map.solve_pazzle
+  map.delete_closs
+  map.drop
+  map.reset_del_check
+
   map.conversion_data
   pp map
 end
