@@ -44,7 +44,7 @@ def solve(input)
   end
 
   if flag == true
-    puts "yes"
+    puts "Yes"
   end
 
 end
