@@ -21,6 +21,8 @@ def solve(input)
     info << data.shift
   end
 
+  pp info
+
   puts info.max_by{ |element| info.count(element)}
 
 end
